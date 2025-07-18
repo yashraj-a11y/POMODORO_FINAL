@@ -72,7 +72,7 @@
 
 import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import { StateContext } from '../../../StateProvider';
+import { StateContext } from '../../../StateProvider/StateContext';
 
 const Clock = () => {
   const { time, setTime, isActive, setIsActive, initTime } = useContext(StateContext);
@@ -84,7 +84,7 @@ const Clock = () => {
       }, 1000);
       return () => clearInterval(interval);
     }
-  }, [time, isActive]);
+  }, [time, isActive, setTime]);
 
   const toggleClock = () => setIsActive(!isActive);
 

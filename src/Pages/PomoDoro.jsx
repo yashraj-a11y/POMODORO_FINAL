@@ -16,7 +16,7 @@ const Pomodoro = () => {
 
       <TimerWrapper>
         <Timer />
-        <SettingsIcon onClick={() => setIsOpen(true)}>⚙️</SettingsIcon>
+        <SettingsIcon onClick={e => { e.stopPropagation(); setIsOpen(true); }}>⚙️</SettingsIcon>
       </TimerWrapper>
 
       <TodolistWrapper>

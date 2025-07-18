@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import Tags from '../components/Tags/Tags';
 import Timer from '../components/Timer/Timer';
-import { StateContext } from '../components/StateProvider';
+import { StateContext } from '../components/StateProvider/StateContext';
 
 const LongBreak = () => {
   const { setActiveTag } = useContext(StateContext);

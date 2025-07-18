@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { Formik, Form, Field } from 'formik';
-import { StateContext } from '../StateProvider';
+import { StateContext } from '../StateProvider/StateContext';
 
 function ModalContainer({ onClose }) {
   const {
@@ -18,6 +18,7 @@ function ModalContainer({ onClose }) {
         initial={{ y: '-100vh', scale: 0.8 }}
         animate={{ y: 0, scale: 1 }}
         exit={{ y: '-100vh', scale: 0.8 }}
+        onClick={e => e.stopPropagation()}
       >
         <ModalHeader>
           <ModalTitle>Settings</ModalTitle>
@@ -83,6 +84,7 @@ const ModalContent = styled.div`
   border-radius: 1rem;
   color: ${props => props.theme.colors.text};
   padding-bottom: 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 
   @media (max-width: 600px) {
     width: 90%;
@@ -131,7 +133,7 @@ const FormControl = styled.div`
     padding: 1rem;
     border-radius: 0.5rem;
     border: 1px solid ${props => props.theme.colors.text};
-    background: #fff;
+    background: ${props => props.theme.colors.bg};
     color: ${props => props.theme.colors.text};
   }
 `;
@@ -143,11 +145,19 @@ const ButtonWrapper = styled.div`
 `;
 
 const ApplyButton = styled.button`
-  all: unset;
   padding: 1rem 4rem;
   font-size: 1.6rem;
   background: ${props => props.theme.colors.primary};
-  color: white;
+  color: #fff;
+  border: none;
   border-radius: 0.5rem;
   cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+
+  &:hover {
+    background: ${props => props.theme.colors.text};
+    color: ${props => props.theme.colors.primary};
+    opacity: 0.9;
+  }
 `;

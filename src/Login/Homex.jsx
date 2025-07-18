@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Final from '../components/Navbar/final';
 import Tags from '../components/Tags/Tags';
 import Timer from '../components/Timer/Timer';

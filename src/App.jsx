@@ -81,37 +81,20 @@
 // export default App;
 
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ThemeProvider } from 'styled-components';
 import RouteApp from './Route/Route';
 import GlobalStyle from './globalStyles';
-
-// Optional: toggle between light and dark themes
-const lightTheme = {
-  colors: {
-    primary: '#b85600',
-    secondary: '#f4f4f4',
-    bg: '#ffffff',
-    text: '#000000',
-  },
-};
-
-const darkTheme = {
-  colors: {
-    primary: '#b85600',
-    secondary: '#08002b',
-    bg: '#220045',
-    text: '#ffffff',
-  },
-};
+import { theme as lightTheme, darkTheme } from './theme';
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(true);
+  // Always use dark mode for now
+  const darkMode = true;
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <GlobalStyle />
-      <RouteApp darkMode={darkMode} setDarkMode={setDarkMode} />
+      <RouteApp darkMode={darkMode} setDarkMode={() => {}} />
     </ThemeProvider>
   );
 };

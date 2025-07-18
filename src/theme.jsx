@@ -13,6 +13,7 @@ export const theme = {
       secondary: '#08002b',
       bg: '#220045',
       text: '#ffffff',
+      navbar: '#180032',
     },
   };
   

@@ -60,7 +60,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Navigation from '../components/Navigation/Navigation';
 
-import Pomodoro from '../Pages/Pomodoro';
+import Pomodoro from '../Pages/PomoDoro';
 import ShortBreak from '../Pages/ShortBreak';
 import LongBreak from '../Pages/LongBreak';
 import Contact from '../Pages/Contact';

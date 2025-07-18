@@ -45,7 +45,7 @@ import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import Menu from './Menu'; // Handles dropdowns like Services
 
-const Navbar = ({ toggleDrawer, routes, darkMode, setDarkMode }) => {
+const Navbar = ({ toggleDrawer, routes }) => {
   return (
     <SNavbar>
       <NavContainer>
@@ -72,9 +72,7 @@ const Navbar = ({ toggleDrawer, routes, darkMode, setDarkMode }) => {
           {/* ✅ Fixed Login Link */}
           <LoginButton to="/SignIn">Login</LoginButton>
 
-          <ThemeToggle onClick={() => setDarkMode((prev) => !prev)}>
-            {darkMode ? '☀️' : '🌙'}
-          </ThemeToggle>
+          {/* Remove ThemeToggle from RightNav and from the component JSX */}
         </RightNav>
       </NavContainer>
     </SNavbar>
@@ -171,8 +169,9 @@ export default Navbar;
 //   cursor: pointer;
 // `;
 const SNavbar = styled.nav`
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.navbar};
   color: ${({ theme }) => theme.colors.text};
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
 `;
 
 const NavContainer = styled.div`
@@ -214,29 +213,44 @@ const NavRoutes = styled.div`
 const NavRoute = styled(Link)`
   text-decoration: none;
   color: ${({ theme }) => theme.colors.text};
-  font-size: 2rem;
+  font-size: 1.7rem;
+  padding: 0.9rem 2rem;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  height: 3.6rem;
+  transition: background 0.2s, text-decoration 0.2s, opacity 0.2s;
+  box-sizing: border-box;
 
   &:hover {
-    color: black;
-    background-color: white;
-    border-radius: 1rem;
-    padding: 0.5rem;
+    text-decoration: underline;
+    opacity: 0.85;
+    background: none;
+    color: ${({ theme }) => theme.colors.text};
   }
 `;
 
 // ✅ Final Login Button (fixed)
 const LoginButton = styled(Link)`
-  padding: 0.7rem 2rem;
+  padding: 0.9rem 2rem;
   border: 1px solid ${({ theme }) => theme.colors.text};
-  background-color: white;
-  border-radius: 3rem;
+  background-color: transparent;
+  border-radius: 2rem;
   font-weight: bold;
   text-decoration: none;
   color: ${({ theme }) => theme.colors.text};
+  font-size: 1.7rem;
+  display: flex;
+  align-items: center;
+  height: 3.6rem;
+  box-sizing: border-box;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
 
   &:hover {
-    background-color: yellow;
-    box-shadow: 0px 0px 10px yellow;
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: #fff;
+    opacity: 0.9;
+    box-shadow: none;
     border: none;
   }
 `;
@@ -247,6 +261,7 @@ const DrawerButton = styled.button`
   cursor: pointer;
 `;
 
+// Remove ThemeToggle from RightNav and from the component JSX
 const ThemeToggle = styled.button`
   background: none;
   border: none;

@@ -166,13 +166,17 @@ const NavRoute = styled(Link)`
 
 const LoginButton = styled.button`
   padding: 0.7rem 2rem;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.secondary};
   border-radius: 2rem;
-  border: 1px solid ${props => props.theme.colors.text};
+  border: 1px solid ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.text};
+  font-weight: bold;
+  cursor: pointer;
 
   &:hover {
-    background-color: yellow;
-    box-shadow: 0 0 10px yellow;
+    background-color: ${({ theme }) => theme.colors.primary};
+    color: #fff;
+    box-shadow: none;
   }
 `;
 

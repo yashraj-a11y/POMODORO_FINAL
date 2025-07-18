@@ -56,9 +56,8 @@
 
 // export default StateProvider;
 
-import React, { createContext, useState, useEffect } from 'react';
-
-export const StateContext = createContext(null);
+import React, { useState, useEffect } from 'react';
+import { StateContext } from './StateProvider/StateContext';
 
 export const StateProvider = ({ children }) => {
   const [activeTag, setActiveTag] = useState(0);
