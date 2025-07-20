@@ -7,7 +7,7 @@ import GlobalStyle from './globalStyles';
 import { theme as lightTheme, darkTheme } from './theme';
 
 const App = () => {
-  // Always use dark mode for now
+  
   const darkMode = true;
 
   return (

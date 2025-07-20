@@ -2,11 +2,15 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import Menu from './Menu'; // Handles dropdowns like Services
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ toggleDrawer, routes }) => {
+  const BrandClickHandle= () =>  {
+    Navigate('/services/pomodoro')
+  }
   return (
     <SNavbar>
       <NavContainer>
@@ -14,7 +18,7 @@ const Navbar = ({ toggleDrawer, routes }) => {
           <DrawerButton onClick={toggleDrawer}>
             <FaBars />
           </DrawerButton>
-          <SNavbarBrand to="/">Pomodoro</SNavbarBrand>
+          <SNavbarBrand onClick={BrandClickHandle}>PomoDoro</SNavbarBrand>
         </LeftGroup>
 
         <RightNav>
