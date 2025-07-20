@@ -1,112 +1,216 @@
-
-
-// import React, { useState } from 'react';
-// import { auth } from '../firebase';
-// import { createUserWithEmailAndPassword } from 'firebase/auth';
-// import { useNavigate } from 'react-router-dom';
-
-// const Register = () => {
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const navigate = useNavigate();
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     try {
-//       await createUserWithEmailAndPassword(auth, email, password);
-//       navigate('/homex');
-//     } catch (err) {
-//       alert(err.message);
-//     }
-//   };
-
-//   return (
-//     <div className="container" style={{ width: '50%' }}>
-//       <h1 className="text-center">Register</h1>
-//       <form onSubmit={handleSubmit}>
-//         <div className="mb-3">
-//           <label>Email address</label>
-//           <input
-//             type="email"
-//             className="form-control"
-//             onChange={(e) => setEmail(e.target.value)}
-//             value={email}
-//             required
-//           />
-//         </div>
-//         <div className="mb-3">
-//           <label>Password</label>
-//           <input
-//             type="password"
-//             className="form-control"
-//             onChange={(e) => setPassword(e.target.value)}
-//             value={password}
-//             required
-//           />
-//         </div>
-//         <button className="btn btn-primary" type="submit">Register</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default Register;
-
-
 import React, { useState } from 'react';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate('/homex');
     } catch (err) {
-      alert(err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Container>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        <Button type="submit">Register</Button>
-      </form>
+      <RegisterCard>
+        <Title>Create Account</Title>
+        <Subtitle>Join us today</Subtitle>
+        
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        
+        <Form onSubmit={handleSubmit}>
+          <InputGroup>
+            <Label>Email</Label>
+            <Input 
+              type="email" 
+              placeholder="Enter your email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </InputGroup>
+          
+          <InputGroup>
+            <Label>Password</Label>
+            <Input 
+              type="password" 
+              placeholder="Create a password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </InputGroup>
+          
+          <InputGroup>
+            <Label>Confirm Password</Label>
+            <Input 
+              type="password" 
+              placeholder="Confirm your password" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </InputGroup>
+          
+          <Button type="submit" disabled={loading}>
+            {loading ? 'Creating Account...' : 'Create Account'}
+          </Button>
+        </Form>
+
+        <SignInLink>
+          Already have an account? <Link to="/signin">Sign in</Link>
+        </SignInLink>
+      </RegisterCard>
     </Container>
   );
 };
 
 export default Register;
 
+// Styled Components
 const Container = styled.div`
-  width: 50%;
-  margin: 5rem auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  padding: 2rem;
+`;
+
+const RegisterCard = styled.div`
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  font-weight: 700;
   text-align: center;
-  color: ${props => props.theme.colors.text};
+  color: #333;
+  margin-bottom: 0.5rem;
+`;
+
+const Subtitle = styled.p`
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+`;
+
+const Form = styled.form`
+  width: 100%;
+`;
+
+const InputGroup = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
 `;
 
 const Input = styled.input`
-  width: 80%;
+  width: 100%;
   padding: 1rem;
-  margin: 1rem 0;
-  font-size: 1.6rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #f5576c;
+  }
+
+  &::placeholder {
+    color: #999;
+  }
 `;
 
 const Button = styled.button`
-  padding: 1rem 3rem;
-  font-size: 1.6rem;
-  background-color: ${props => props.theme.colors.primary};
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
   color: white;
   border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(245, 87, 108, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`;
+
+const SignInLink = styled.p`
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+
+  a {
+    color: #f5576c;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const ErrorMessage = styled.div`
+  background: #fee;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: center;
 `;

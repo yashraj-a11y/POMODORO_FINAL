@@ -1,101 +1,3 @@
-// import React, { useState } from 'react';
-// import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-// import { auth } from '../firebase';
-// import { useNavigate, Link } from 'react-router-dom';
-
-// const SignInPage = () => {
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const navigate = useNavigate();
-//   const provider = new GoogleAuthProvider();
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     try {
-//       await signInWithEmailAndPassword(auth, email, password);
-//       navigate('/homex');
-//     } catch (err) {
-//       alert(err.message);
-//     }
-//   };
-
-//   const googleClick = async () => {
-//     try {
-//       await signInWithPopup(auth, provider);
-//       navigate('/homex');
-//     } catch (err) {
-//       alert(err.message);
-//     }
-//   };
-
-//   return (
-//     <div className="container" style={{ width: '50%' }}>
-//       <h1 className="text-center">Login</h1>
-//       <form onSubmit={handleLogin}>
-//         <div className="mb-3">
-//           <label>Email</label>
-//           <input
-//             type="email"
-//             className="form-control"
-//             onChange={(e) => setEmail(e.target.value)}
-//             value={email}
-//             required
-//           />
-//         </div>
-//         <div className="mb-3">
-//           <label>Password</label>
-//           <input
-//             type="password"
-//             className="form-control"
-//             onChange={(e) => setPassword(e.target.value)}
-//             value={password}
-//             required
-//           />
-//         </div>
-//         <button className="btn btn-primary" type="submit">Login</button>
-//         <Link to="/register">
-//           <p className="text-end">New user? Register</p>
-//         </Link>
-//       </form>
-
-//       {/* Google Login */}
-//       <div className="container text-center mt-3">
-//         <div className="d-flex justify-content-center align-items-center">
-//           <button
-//             onClick={googleClick}
-//             className="btn d-flex justify-content-center align-items-center"
-//             style={{
-//               backgroundColor: 'white',
-//               width: '72%',
-//             }}
-//           >
-//             <div style={{ width: '12%' }}>
-//               <img
-//                 src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-webinar-optimizing-for-success-google-business-webinar-13.png"
-//                 alt=""
-//                 style={{ width: '100%' }}
-//               />
-//             </div>
-//             <div>
-//               <h2
-//                 style={{
-//                   fontWeight: 'bold',
-//                   color: 'red',
-//                 }}
-//               >
-//                 Login With Google
-//               </h2>
-//             </div>
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SignInPage;
-
-
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../firebase';
@@ -105,82 +7,265 @@ import styled from 'styled-components';
 const SignInPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+    
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/homex');
     } catch (err) {
-      alert(err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   const googleClick = async () => {
+    setLoading(true);
+    setError('');
+    
     try {
       await signInWithPopup(auth, provider);
       navigate('/homex');
     } catch (err) {
-      alert(err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Container>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <Input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-        <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        <Button type="submit">Login</Button>
-      </form>
-      <Link to="/register">New user? Register</Link>
-      <GoogleButton onClick={googleClick}>
-        <img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-icon-png-transparent-background-osteopathy-16.png" alt="google" />
-        Login with Google
-      </GoogleButton>
+      <LoginCard>
+        <Title>Welcome Back</Title>
+        <Subtitle>Sign in to your account</Subtitle>
+        
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        
+        <Form onSubmit={handleLogin}>
+          <InputGroup>
+            <Label>Email</Label>
+            <Input 
+              type="email" 
+              placeholder="Enter your email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </InputGroup>
+          
+          <InputGroup>
+            <Label>Password</Label>
+            <Input 
+              type="password" 
+              placeholder="Enter your password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </InputGroup>
+          
+          <Button type="submit" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In'}
+          </Button>
+        </Form>
+
+        <Divider>
+          <DividerLine />
+          <DividerText>or</DividerText>
+          <DividerLine />
+        </Divider>
+
+        <GoogleButton onClick={googleClick} disabled={loading}>
+          <GoogleIcon 
+            src="https://www.google.com/favicon.ico" 
+            alt="Google" 
+          />
+          Continue with Google
+        </GoogleButton>
+
+        <SignUpLink>
+          Don't have an account? <Link to="/register">Sign up</Link>
+        </SignUpLink>
+      </LoginCard>
     </Container>
   );
 };
 
 export default SignInPage;
 
+// Styled Components
 const Container = styled.div`
-  width: 50%;
-  margin: 5rem auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+`;
+
+const LoginCard = styled.div`
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  font-weight: 700;
   text-align: center;
-  color: ${props => props.theme.colors.text};
+  color: #333;
+  margin-bottom: 0.5rem;
+`;
+
+const Subtitle = styled.p`
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+`;
+
+const Form = styled.form`
+  width: 100%;
+`;
+
+const InputGroup = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 600;
+  font-size: 0.9rem;
 `;
 
 const Input = styled.input`
-  width: 80%;
+  width: 100%;
   padding: 1rem;
-  margin: 1rem 0;
-  font-size: 1.6rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+
+  &::placeholder {
+    color: #999;
+  }
 `;
 
 const Button = styled.button`
-  padding: 1rem 3rem;
-  font-size: 1.6rem;
-  background-color: ${props => props.theme.colors.primary};
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  margin-top: 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`;
+
+const Divider = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 2rem 0;
+`;
+
+const DividerLine = styled.div`
+  flex: 1;
+  height: 1px;
+  background: #e1e5e9;
+`;
+
+const DividerText = styled.span`
+  padding: 0 1rem;
+  color: #666;
+  font-size: 0.9rem;
 `;
 
 const GoogleButton = styled.button`
-  margin-top: 2rem;
+  width: 100%;
   padding: 1rem;
   background: white;
+  border: 2px solid #e1e5e9;
+  border-radius: 10px;
   display: flex;
-  gap: 1rem;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
+  gap: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
-  img {
-    width: 24px;
-    height: 24px;
+  &:hover:not(:disabled) {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+`;
+
+const GoogleIcon = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
+const SignUpLink = styled.p`
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+
+  a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
+const ErrorMessage = styled.div`
+  background: #fee;
+  color: #c33;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: center;
 `;

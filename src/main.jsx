@@ -78,6 +78,7 @@ import { theme } from "./theme";
 import GlobalStyle from "./globalStyles";
 import StateProvider from "./components/StateProvider";
 import { BrowserRouter } from "react-router-dom";
+import "./global.css";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
