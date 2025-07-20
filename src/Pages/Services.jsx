@@ -1,16 +1,3 @@
-// import React from 'react'
-// import { BigGradientText,CenterText } from '../styles'
-
-
-// function Services() {
-//   return (
-//     <CenterText>
-//         <BigGradientText>Services</BigGradientText>
-//     </CenterText>
-//   )
-// }
-
-// export default Services;
 
 import React from 'react';
 import { BigGradientText, CenterText } from '../styles';

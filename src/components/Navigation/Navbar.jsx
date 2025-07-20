@@ -1,43 +1,4 @@
-// import React from 'react';
-// import styled from 'styled-components';
-// import { Link } from 'react-router-dom';
-// import { FaBars } from 'react-icons/fa';
-// import Menu from './Menu';
 
-// const Navbar = ({ toggleDrawer, routes, darkMode, setDarkMode }) => {
-//   return (
-//     <SNavbar>
-//       <NavContainer>
-//         <LeftGroup>
-//           <DrawerButton onClick={toggleDrawer}>
-//             <FaBars />
-//           </DrawerButton>
-//           <SNavbarBrand to="/">Pomodoro</SNavbarBrand>
-//         </LeftGroup>
-
-//         <RightNav>
-//           <NavRoutes>
-//             {routes.map((route) =>
-//               route.subRoutes ? (
-//                 <Menu route={route} key={route.name} />
-//               ) : (
-//                 <NavRoute to={route.link} key={route.name}>
-//                   {route.name}
-//                 </NavRoute>
-//               )
-//             )}
-//           </NavRoutes>
-//           <LoginButton to="/SignInPage">Login</LoginButton>
-//           <ThemeToggle onClick={() => setDarkMode((prev) => !prev)}>
-//             {darkMode ? '☀️' : '🌙'}
-//           </ThemeToggle>
-//         </RightNav>
-//       </NavContainer>
-//     </SNavbar>
-//   );
-// };
-
-// export default Navbar;
 
 import React from 'react';
 import styled from 'styled-components';

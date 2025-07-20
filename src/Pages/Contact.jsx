@@ -1,16 +1,4 @@
-// import React from 'react'
-// import { BigGradientText,CenterText } from '../styles'
 
-
-// function Contact() {
-//   return (
-//     <CenterText>
-//         <BigGradientText>Contact Us</BigGradientText>
-//     </CenterText>
-//   )
-// }
-
-// export default Contact
 
 import React, { useState } from 'react';
 import styled from 'styled-components';

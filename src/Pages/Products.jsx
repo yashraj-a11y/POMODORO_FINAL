@@ -1,16 +1,4 @@
-// import React from 'react'
-// import { BigGradientText,CenterText } from '../styles'
 
-
-// function Products() {
-//   return (
-//     <CenterText>
-//         <BigGradientText>Products</BigGradientText>
-//     </CenterText>
-//   )
-// }
-
-// export default Products
 
 import React from 'react';
 import styled from 'styled-components';

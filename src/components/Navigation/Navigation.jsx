@@ -1,31 +1,4 @@
-// import React, { useState } from "react";
-// import Navbar from "./Navbar";
-// import { routes } from "../../constant";
-// import Drawer from './Drawer'
-// import ExpandMenu from "./ExpandMenu";
 
-
-// const Navigation = () => {
-
-//     const [isOpen,setIsOpen] = useState(false)
-
-//     const toggleDrawer = () => {
-//         setIsOpen(!isOpen)
-//     }
-  
-  
-
-//   return (
-//     <>
-      
-//       <Navbar toggleDrawer={toggleDrawer} routes={routes}/>
-//       <Drawer routes={routes} isOpen={isOpen} toggleDrawer={toggleDrawer} />
-      
-//     </>
-//   );
-// };
-
-// export default Navigation;
 
 import React, { useState } from "react";
 import Navbar from "./Navbar";
