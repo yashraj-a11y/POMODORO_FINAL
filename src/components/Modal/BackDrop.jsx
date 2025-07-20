@@ -1,27 +1,3 @@
-// import React from 'react'
-// import styled from 'styled-components';
-
-// function BackDrop() {
-//   return (
-//     <KBackdrop />
-
-    
-//   )
-// }
-
-// export default BackDrop;
-
-// const KBackdrop = styled.div`
-
-//     width: 100%;
-//     height: 100%;
-//     top: 0;
-//     left: 0;
-//     z-index: 100;
-
-    
-// `
-
 import React from 'react';
 import styled from 'styled-components';
 
@@ -35,8 +11,9 @@ const KBackdrop = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   z-index: 100;
   background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1px);
 `;
