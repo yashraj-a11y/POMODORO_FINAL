@@ -34,10 +34,9 @@ const Navbar = ({ toggleDrawer, routes }) => {
             )}
           </NavRoutes>
 
-          {/* ✅ Fixed Login Link */}
           <LoginButton to="/SignIn">Login</LoginButton>
 
-          {/* Remove ThemeToggle from RightNav and from the component JSX */}
+          
         </RightNav>
       </NavContainer>
     </SNavbar>

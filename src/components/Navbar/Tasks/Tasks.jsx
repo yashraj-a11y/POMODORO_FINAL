@@ -17,6 +17,7 @@ export default function Todolist() {
   const [newTitle, setNewTitle] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState('');
+  
 
   useEffect(() => {
     const q = query(collection(db, 'tasks'), orderBy('createdAt'));
@@ -29,12 +30,20 @@ export default function Todolist() {
   const handleAdd = async e => {
     e.preventDefault();
     if (!newTitle.trim()) return;
-    await addDoc(collection(db, 'tasks'), {
-      title: newTitle.trim(),
-      completed: false,
-      createdAt: Date.now(),
-    });
-    setNewTitle('');
+    
+    try {
+      await addDoc(collection(db, 'tasks'), {
+        title: newTitle.trim(),
+        completed: false,
+        createdAt: Date.now(),
+      });
+      // Clear the input field after successful addition
+      setNewTitle('');
+    } catch (error) {
+      console.error('Error adding task:', error);
+      // Clear input even if there's an error to prevent confusion
+      setNewTitle('');
+    }
   };
 
   const toggleCompleted = async (id, current) => {
@@ -48,9 +57,16 @@ export default function Todolist() {
 
   const handleSave = async id => {
     if (!editingText.trim()) return;
-    await updateDoc(doc(db, 'tasks', id), { title: editingText });
-    setEditingId(null);
-    setEditingText('');
+    try {
+      await  updateDoc(doc(db, 'tasks', id), { title: editingText.trim() });
+      setEditingId(null)
+      setEditingId('')
+      setEditingText('')
+      
+    } catch (err){
+      console.log('error')
+
+    }
   };
 
   const handleCancel = () => {
@@ -64,125 +80,310 @@ export default function Todolist() {
 
   return (
     <Wrapper>
-      <Title>Pomodoro Task List</Title>
+      <Title>🍅 Pomodoro Task List</Title>
 
       <Form onSubmit={handleAdd}>
         <Input
-          placeholder="Enter new task"
+          placeholder="Enter new task..."
           value={newTitle}
           onChange={e => setNewTitle(e.target.value)}
         />
-        <AddButton type="submit">Add</AddButton>
+        <AddButton type="submit">+ Add Task</AddButton>
       </Form>
 
       <TaskList>
         {tasks.map(task => (
-          <TaskItem key={task.id}>
-            <Checkbox
-              type="checkbox"
-              checked={task.completed}
-              onChange={() => toggleCompleted(task.id, task.completed)}
-            />
-            {editingId === task.id ? (
-              <>
-                <Input
-                  value={editingText}
-                  onChange={e => setEditingText(e.target.value)}
-                  onKeyDown={e => e.key === 'Enter' && handleSave(task.id)}
-                />
-                <ActionButton onClick={() => handleSave(task.id)}>Save</ActionButton>
-                <ActionButton onClick={handleCancel}>Cancel</ActionButton>
-              </>
-            ) : (
-              <>
-                <TaskText
-                  onDoubleClick={() => startEditing(task.id, task.title)}
-                  completed={task.completed}
-                >
-                  {task.title}
-                </TaskText>
-                <ActionButton onClick={() => startEditing(task.id, task.title)}>Edit</ActionButton>
-                <ActionButton onClick={() => handleDelete(task.id)}>Delete</ActionButton>
-              </>
-            )}
+          <TaskItem key={task.id} completed={task.completed}>
+            <TaskContent>
+              <Checkbox
+                type="checkbox"
+                checked={task.completed}
+                onChange={() => toggleCompleted(task.id, task.completed)}
+              />
+              {editingId === task.id ? (
+                <EditingContainer>
+                  <EditInput
+                    value={editingText}
+                    onChange={e => setEditingText(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        handleSave(task.id)
+                      }
+                    }
+                      
+                    }
+                    autoFocus
+                  />
+                  <ButtonGroup>
+                    <SaveButton onClick={() => handleSave(task.id)}>✓ Save</SaveButton>
+                    <CancelButton onClick={handleCancel}>✕ Cancel</CancelButton>
+                  </ButtonGroup>
+                </EditingContainer>
+              ) : (
+                <TaskContentContainer>
+                  <TaskText
+                    onDoubleClick={() => startEditing(task.id, task.title)}
+                    completed={task.completed}
+                  >
+                    {task.title}
+                  </TaskText>
+                  <ButtonGroup>
+                    <EditButton onClick={() => startEditing(task.id, task.title)}>✏️ Edit</EditButton>
+                    <DeleteButton onClick={() => handleDelete(task.id)}>🗑️ Delete</DeleteButton>
+                  </ButtonGroup>
+                </TaskContentContainer>
+              )}
+            </TaskContent>
           </TaskItem>
         ))}
       </TaskList>
+
+      {tasks.length === 0 && (
+        <EmptyState>
+          <EmptyIcon>📝</EmptyIcon>
+          <EmptyText>No tasks yet. Add your first task above!</EmptyText>
+        </EmptyState>
+      )}
     </Wrapper>
   );
 }
 
 // Styled Components
 const Wrapper = styled.div`
-  max-width: 600px;
+  max-width: 700px;
   margin: 2rem auto;
-  font-family: sans-serif;
-  color: ${props => props.theme.colors.text};
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
 `;
 
 const Title = styled.h1`
-  font-size: 3rem;
+  font-size: 3.5rem;
   text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 700;
 `;
 
 const Form = styled.form`
   display: flex;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  gap: 1rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 `;
 
 const Input = styled.input`
   flex: 1;
-  padding: 0.7rem;
+  padding: 1rem 1.5rem;
   font-size: 1.6rem;
-  border: 1px solid ${props => props.theme.colors.text};
-  border-radius: 0.5rem;
-  background-color: #fff;
+  font-weight: 500;
+  border: 2px solid #e1e8ed;
+  border-radius: 12px;
+  background-color: #f8fafc;
+  color: #2d3748;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  &::placeholder {
+    color: #a0aec0;
+    font-weight: 400;
+  }
 `;
 
 const AddButton = styled.button`
-  margin-left: 8px;
-  padding: 0.7rem 1.5rem;
-  background-color: ${props => props.theme.colors.primary};
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   color: white;
   border: none;
-  border-radius: 0.5rem;
-  font-weight: bold;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 `;
 
 const TaskList = styled.ul`
   list-style: none;
   padding: 0;
+  margin: 0;
 `;
 
 const TaskItem = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  background: ${({ completed }) => 
+    completed 
+      ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' 
+      : 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+  };
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  opacity: ${({ completed }) => completed ? 0.8 : 1};
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  }
+`;
+
+const TaskContent = styled.div`
+  padding: 2rem;
 `;
 
 const Checkbox = styled.input`
-  transform: scale(1.5);
+  width: 24px;
+  height: 24px;
   cursor: pointer;
+  accent-color: #fff;
+  margin-right: 1.5rem;
+`;
+
+const TaskContentContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 `;
 
 const TaskText = styled.span`
   flex: 1;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
+  font-weight: 700;
   cursor: pointer;
+  color: white;
   text-decoration: ${({ completed }) => (completed ? 'line-through' : 'none')};
-  color: ${({ completed }) => (completed ? '#999' : 'inherit')};
-`;
-
-const ActionButton = styled.button`
-  padding: 0.5rem 1rem;
-  font-size: 1.4rem;
-  border: none;
-  border-radius: 0.5rem;
-  background-color: #ddd;
-  cursor: pointer;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
 
   &:hover {
-    background-color: #ccc;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
   }
+`;
+
+const EditingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+`;
+
+const EditInput = styled.input`
+  flex: 1;
+  padding: 1rem 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  border: 2px solid white;
+  border-radius: 10px;
+  background-color: white;
+  color: #2d3748;
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.5);
+  }
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+`;
+
+const BaseButton = styled.button`
+  padding: 0.8rem 1.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const EditButton = styled(BaseButton)`
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+`;
+
+const DeleteButton = styled(BaseButton)`
+  background: rgba(255, 59, 48, 0.8);
+  color: white;
+
+  &:hover {
+    background: rgba(255, 59, 48, 1);
+  }
+`;
+
+const SaveButton = styled(BaseButton)`
+  background: rgba(52, 199, 89, 0.9);
+  color: white;
+
+  &:hover {
+    background: rgba(52, 199, 89, 1);
+  }
+`;
+
+const CancelButton = styled(BaseButton)`
+  background: rgba(255, 149, 0, 0.9);
+  color: white;
+
+  &:hover {
+    background: rgba(255, 149, 0, 1);
+  }
+`;
+
+const EmptyState = styled.div`
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+`;
+
+const EmptyIcon = styled.div`
+  font-size: 4rem;
+  margin-bottom: 1rem;
+`;
+
+const EmptyText = styled.p`
+  font-size: 1.6rem;
+  color: #718096;
+  font-weight: 500;
 `;
