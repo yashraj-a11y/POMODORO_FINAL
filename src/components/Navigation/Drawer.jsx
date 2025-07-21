@@ -2,10 +2,24 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ExpandMenu from './ExpandMenu';
+import { Navigate } from 'react-router-dom';
+import { getAuth, signOut } from 'firebase/auth';
 
 const Drawer = ({ isOpen, toggleDrawer, routes }) => {
+  const auth = getAuth();
+  const navigate = useNavigate();
+
+  const HandleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/signin');
+    } catch (err) {
+      console.log('error')
+    }
+
+  }
   return (
     <>
       {isOpen && <SBackdrop onClick={toggleDrawer} />}
@@ -23,7 +37,7 @@ const Drawer = ({ isOpen, toggleDrawer, routes }) => {
               )
             )}
           </NavRoutes>
-          <LoginButton>Login</LoginButton>
+          <LoginButton onClick={HandleLogout}>LogOut</LoginButton>
         </RightNav>
       </SDrawer>
     </>
