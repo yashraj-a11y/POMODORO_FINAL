@@ -2,15 +2,16 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import Menu from './Menu'; // Handles dropdowns like Services
-import { useNavigate } from 'react-router-dom';
+import { FaSun, FaMoon } from 'react-icons/fa';
 
-const Navbar = ({ toggleDrawer, routes }) => {
-  const BrandClickHandle= () =>  {
-    Navigate('/services/pomodoro')
-  }
+const Navbar = ({ toggleDrawer, routes, darkMode, setDarkMode }) => {
+  const navigate = useNavigate();
+  const BrandClickHandle = () => {
+    navigate('/services/pomodoro');
+  };
   return (
     <SNavbar>
       <NavContainer>
@@ -33,6 +34,14 @@ const Navbar = ({ toggleDrawer, routes }) => {
               )
             )}
           </NavRoutes>
+
+          <ThemeToggle
+            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            onClick={() => setDarkMode((prev) => !prev)}
+            title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {darkMode ? <FaSun /> : <FaMoon />}
+          </ThemeToggle>
 
           <LoginButton to="/SignIn">Login</LoginButton>
 

@@ -1,53 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { db } from '../../../firebase';
+import { db, auth } from '../../../firebase';
 import {
-  collection,
-  query,
-  onSnapshot,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  orderBy,
-} from 'firebase/firestore';
+  ref,
+  push,
+  set,
+  update,
+  remove,
+  onValue
+} from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function Todolist() {
   const [tasks, setTasks] = useState([]);
   const [newTitle, setNewTitle] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState('');
-  
+  const [uid, setUid] = useState(null);
 
+  // 🔐 Get current user UID
   useEffect(() => {
-    const q = query(collection(db, 'tasks'), orderBy('createdAt'));
-    const unsub = onSnapshot(q, snapshot => {
-      setTasks(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      }
     });
-    return unsub;
+    return () => unsubscribe();
   }, []);
 
-  const handleAdd = async e => {
+  // 🔁 Load tasks
+  useEffect(() => {
+    if (!uid) return;
+    const userTasksRef = ref(db, `users/${uid}/tasks`);
+    const unsubscribe = onValue(userTasksRef, (snapshot) => {
+      const data = snapshot.val() || {};
+      const formatted = Object.entries(data).map(([id, task]) => ({ id, ...task }));
+      setTasks(formatted);
+    });
+    return () => unsubscribe();
+  }, [uid]);
+
+  const handleAdd = async (e) => {
     e.preventDefault();
-    if (!newTitle.trim()) return;
-    
-    try {
-      await addDoc(collection(db, 'tasks'), {
-        title: newTitle.trim(),
-        completed: false,
-        createdAt: Date.now(),
-      });
-      // Clear the input field after successful addition
-      setNewTitle('');
-    } catch (error) {
-      console.error('Error adding task:', error);
-      // Clear input even if there's an error to prevent confusion
-      setNewTitle('');
-    }
+    if (!newTitle.trim() || !uid) return;
+
+    const taskRef = push(ref(db, `users/${uid}/tasks`));
+    await set(taskRef, {
+      title: newTitle.trim(),
+      completed: false,
+      createdAt: Date.now(),
+    });
+    setNewTitle('');
   };
 
   const toggleCompleted = async (id, current) => {
-    await updateDoc(doc(db, 'tasks', id), { completed: !current });
+    if (!uid) return;
+    await update(ref(db, `users/${uid}/tasks/${id}`), { completed: !current });
+  };
+
+  const handleSave = async (id) => {
+    if (!editingText.trim() || !uid) return;
+    await update(ref(db, `users/${uid}/tasks/${id}`), { title: editingText.trim() });
+    setEditingId(null);
+    setEditingText('');
+  };
+
+  const handleDelete = async (id) => {
+    if (!uid) return;
+    await remove(ref(db, `users/${uid}/tasks/${id}`));
   };
 
   const startEditing = (id, current) => {
@@ -55,27 +75,9 @@ export default function Todolist() {
     setEditingText(current);
   };
 
-  const handleSave = async id => {
-    if (!editingText.trim()) return;
-    try {
-      await  updateDoc(doc(db, 'tasks', id), { title: editingText.trim() });
-      setEditingId(null)
-      setEditingId('')
-      setEditingText('')
-      
-    } catch (err){
-      console.log('error')
-
-    }
-  };
-
   const handleCancel = () => {
     setEditingId(null);
     setEditingText('');
-  };
-
-  const handleDelete = async id => {
-    await deleteDoc(doc(db, 'tasks', id));
   };
 
   return (

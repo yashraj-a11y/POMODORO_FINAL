@@ -1,19 +1,48 @@
-
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { BigGradientText, CenterText } from '../styles';
+import { db, auth } from '../firebase';
+import { ref, push, set } from 'firebase/database';
+import { onAuthStateChanged } from 'firebase/auth';
 
 function Contact() {
   const [feedback, setFeedback] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [uid, setUid] = useState(null);
 
-  const handleSubmit = (e) => {
+  // 🔐 Set UID of the logged-in user
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUid(user.uid);
+      } else {
+        setUid(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Thank you for your feedback: "${feedback}"`);
-    setFeedback('');
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    if (!uid) {
+      alert("You must be logged in to submit feedback.");
+      return;
+    }
+
+    try {
+      const feedbackRef = push(ref(db, `users/${uid}/feedbacks`));
+
+      await set(feedbackRef, {
+        message: feedback,
+        submittedAt: new Date().toISOString(),
+      });
+
+      setSubmitted(true);
+      setFeedback('');
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch (error) {
+      alert("Failed to send feedback: " + error.message);
+    }
   };
 
   return (
@@ -31,7 +60,6 @@ function Contact() {
         />
 
         <StyledButton type="submit">Submit</StyledButton>
-
         {submitted && <SuccessMsg>✔️ Feedback sent successfully!</SuccessMsg>}
       </FormWrapper>
     </CenterText>
