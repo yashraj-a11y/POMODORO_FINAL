@@ -1,17 +1,40 @@
-
-
-import React from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
-import Menu from './Menu'; // Handles dropdowns like Services
-import { FaSun, FaMoon } from 'react-icons/fa';
+import React from "react";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
+import Menu from "./Menu"; // Handles dropdowns like Services
+import { FaSun, FaMoon } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase";
+import { FaUserCircle } from "react-icons/fa";
+import UserDropdown from "../UserDropDown";
 
 const Navbar = ({ toggleDrawer, routes, darkMode, setDarkMode }) => {
   const navigate = useNavigate();
   const BrandClickHandle = () => {
-    navigate('/services/pomodoro');
+    navigate("/services/pomodoro");
   };
+  const [user, setUser] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.user-dropdown')) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
   return (
     <SNavbar>
       <NavContainer>
@@ -36,16 +59,27 @@ const Navbar = ({ toggleDrawer, routes, darkMode, setDarkMode }) => {
           </NavRoutes>
 
           <ThemeToggle
-            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            aria-label={
+              darkMode ? "Switch to light mode" : "Switch to dark mode"
+            }
             onClick={() => setDarkMode((prev) => !prev)}
-            title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
             {darkMode ? <FaSun /> : <FaMoon />}
           </ThemeToggle>
 
-          <LoginButton to="/SignIn">Login</LoginButton>
-
-          
+          {user ? (
+            <div style={{ position: "relative" }}>
+              <FaUserCircle
+                onClick={() => setShowDropdown((prev) => !prev)}
+                size={36}
+                style={{ cursor: "pointer" }}
+              />
+              {showDropdown && <UserDropdown user={user} />}
+            </div>
+          ) : (
+            <LoginButton to="/SignIn">Login</LoginButton>
+          )}
         </RightNav>
       </NavContainer>
     </SNavbar>
@@ -54,14 +88,10 @@ const Navbar = ({ toggleDrawer, routes, darkMode, setDarkMode }) => {
 
 export default Navbar;
 
-
-
-
-
 const SNavbar = styled.nav`
   background-color: ${({ theme }) => theme.colors.navbar};
   color: ${({ theme }) => theme.colors.text};
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const NavContainer = styled.div`

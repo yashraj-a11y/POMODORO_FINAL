@@ -16,7 +16,7 @@ const Drawer = ({ isOpen, toggleDrawer, routes }) => {
       await signOut(auth);
       navigate('/signin');
     } catch (err) {
-      console.log('error')
+      console.log('error',err)
     }
 
   }

@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import RouteApp from './Route/Route';
 import GlobalStyle from './globalStyles';
 import { theme as lightTheme, darkTheme } from './theme';
+import UserDropdown from './components/UserDropDown';
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(true);
@@ -12,6 +13,7 @@ const App = () => {
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <GlobalStyle />
       <RouteApp darkMode={darkMode} setDarkMode={setDarkMode} />
+      
     </ThemeProvider>
   );
 };

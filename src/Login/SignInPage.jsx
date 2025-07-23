@@ -32,7 +32,7 @@ const SignInPage = () => {
 
       navigate('/'); // Redirect to home
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
+      setError('Invalid email or password. Please try again.',err);
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ const SignInPage = () => {
 
       navigate('/'); // Redirect to home
     } catch (err) {
-      setError('Google sign-in failed. Please try again.');
+      setError('Google sign-in failed. Please try again.',err);
     } finally {
       setLoading(false);
     }
