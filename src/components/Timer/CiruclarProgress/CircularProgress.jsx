@@ -11,7 +11,7 @@ const CircularProgress = () => {
   }, [time, initTime, setProgress]);
 
   return (
-    <OuterCircle progress={progress}>
+    <OuterCircle $progress={progress}>
       <InnerCircle>
         <Clock />
       </InnerCircle>
@@ -28,8 +28,8 @@ const OuterCircle = styled.div`
   display: grid;
   place-items: center;
   background: conic-gradient(
-    ${({ theme }) => theme.colors.primary} ${({ progress }) => progress}%,
-    transparent ${({ progress }) => progress}%
+    ${({ theme }) => theme.colors.primary} ${({ $progress }) => $progress}%,
+    transparent ${({ $progress }) => $progress}%
   );
 
   @media (max-width: 768px) {

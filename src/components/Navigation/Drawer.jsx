@@ -23,7 +23,7 @@ const Drawer = ({ isOpen, toggleDrawer, routes }) => {
   return (
     <>
       {isOpen && <SBackdrop onClick={toggleDrawer} />}
-      <SDrawer isOpen={isOpen}>
+      <SDrawer $isOpen={isOpen}>
         <RightNav>
           <SNavbarBrand to="/" onClick={toggleDrawer}>Pomodoro</SNavbarBrand>
           <NavRoutes>
@@ -66,7 +66,7 @@ const SDrawer = styled.div`
   max-width: 300px;
   background-color: ${props => props.theme.colors.bg};
   color: ${props => props.theme.colors.text};
-  transform: translateX(${props => (props.isOpen ? '0' : '-100%')});
+  transform: translateX(${props => (props.$isOpen ? '0' : '-100%')});
   transition: transform 0.3s ease-in-out;
   padding: 2rem;
 `;

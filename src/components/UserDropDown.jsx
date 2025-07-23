@@ -13,16 +13,16 @@ const UserDropdown = ({ user }) => {
 
   useEffect(() => {
     if (!user) {
-      console.warn("No user found in UserDropdown.");
+      
       return;
     }
 
-    console.log("UserDropdown mounted with UID:", user.uid);
+    
 
     const feedbackRef = ref(db, `users/${user.uid}/feedbacks`);
     onValue(feedbackRef, (snapshot) => {
       const data = snapshot.val();
-      console.log("Feedback data:", data);
+      
       if (data) {
         const values = Object.values(data);
         setFeedbackList(values.map((f) => f.message));
@@ -34,7 +34,7 @@ const UserDropdown = ({ user }) => {
     const tasksRef = ref(db, `users/${user.uid}/tasks`);
     onValue(tasksRef, (snapshot) => {
       const taskData = snapshot.val();
-      console.log("Task data:", taskData);
+      
       if (taskData) {
         setTasks(Object.values(taskData));
       } else {

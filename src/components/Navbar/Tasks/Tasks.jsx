@@ -95,7 +95,7 @@ export default function Todolist() {
 
       <TaskList>
         {tasks.map(task => (
-          <TaskItem key={task.id} completed={task.completed}>
+          <TaskItem key={task.id} $completed={task.completed}>
             <TaskContent>
               <Checkbox
                 type="checkbox"
@@ -126,7 +126,7 @@ export default function Todolist() {
                 <TaskContentContainer>
                   <TaskText
                     onDoubleClick={() => startEditing(task.id, task.title)}
-                    completed={task.completed}
+                    $completed={task.completed}
                   >
                     {task.title}
                   </TaskText>
@@ -235,15 +235,15 @@ const TaskList = styled.ul`
 
 const TaskItem = styled.li`
   margin-bottom: 1.5rem;
-  background: ${({ completed }) => 
-    completed 
+  background: ${({ $completed }) => 
+    $completed 
       ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' 
       : 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
   };
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   transition: all 0.3s ease;
-  opacity: ${({ completed }) => completed ? 0.8 : 1};
+  opacity: ${({ $completed }) => $completed ? 0.8 : 1};
 
   &:hover {
     transform: translateY(-3px);
@@ -276,7 +276,7 @@ const TaskText = styled.span`
   font-weight: 700;
   cursor: pointer;
   color: white;
-  text-decoration: ${({ completed }) => (completed ? 'line-through' : 'none')};
+  text-decoration: ${({ $completed }) => ($completed ? 'line-through' : 'none')};
   text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
   padding: 0.5rem 0;
   transition: all 0.3s ease;

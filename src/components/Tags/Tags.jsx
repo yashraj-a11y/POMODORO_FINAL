@@ -16,8 +16,8 @@ const Tags = () => {
       {labels.map((tag, i) => (
         <Tag
           key={i}
-          activeTag={activeTag === i}
-          index={i}
+          $activeTag={activeTag === i}
+          $index={i}
           onClick={() => handleTagClick(i)}
         >
           {tag}
@@ -30,7 +30,7 @@ const Tags = () => {
 export default Tags;
 
 const TagsContainer = styled.div`
-  background: ${props => props.theme.colors.secondary};
+  background: ${({ theme }) => theme.colors.secondary};
   height: 5rem;
   width: 40rem;
   margin: 2rem auto;
@@ -49,15 +49,18 @@ const Tag = styled.button`
   font-size: 1.8rem;
   flex: 1;
   cursor: pointer;
-  background: ${props => {
-    if (props.activeTag) {
-      if (props.index === 1) return props.theme.colors.shortBreak;
-      if (props.index === 2) return props.theme.colors.longBreak;
-      return props.theme.colors.primary;
+
+  background: ${({ $activeTag, $index, theme }) => {
+    if ($activeTag) {
+      if ($index === 1) return theme.colors.shortBreak;
+      if ($index === 2) return theme.colors.longBreak;
+      return theme.colors.primary;
     } else {
       return 'transparent';
     }
   }};
-  color: ${props => (props.activeTag ? 'white' : props.theme.colors.text)};
+
+  color: ${({ $activeTag, theme }) =>
+    $activeTag ? 'white' : theme.colors.text};
   transition: background 0.3s ease-in-out;
 `;
