@@ -4,54 +4,76 @@ import styled from "styled-components";
 import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { onValue, ref } from "firebase/database";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const UserDropdown = ({ user }) => {
-  const [feedback, setFeedback] = useState("");
+  const [feedbackList, setFeedbackList] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      const feedbackRef = ref(db, `feedbacks/${user.uid}`);
-      onValue(feedbackRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const values = Object.values(data);
-          setFeedback(values[values.length - 1]?.message || "No feedback");
-        }
-      });
-
-      const tasksRef = ref(db, `users/${user.uid}/tasks`);
-      onValue(tasksRef, (snapshot) => {
-        const taskData = snapshot.val();
-        if (taskData) {
-          setTasks(Object.values(taskData));
-        } else {
-          setTasks([]);
-        }
-      });
+    if (!user) {
+      console.warn("No user found in UserDropdown.");
+      return;
     }
+
+    console.log("UserDropdown mounted with UID:", user.uid);
+
+    const feedbackRef = ref(db, `users/${user.uid}/feedbacks`);
+    onValue(feedbackRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log("Feedback data:", data);
+      if (data) {
+        const values = Object.values(data);
+        setFeedbackList(values.map((f) => f.message));
+      } else {
+        setFeedbackList([]);
+      }
+    });
+
+    const tasksRef = ref(db, `users/${user.uid}/tasks`);
+    onValue(tasksRef, (snapshot) => {
+      const taskData = snapshot.val();
+      console.log("Task data:", taskData);
+      if (taskData) {
+        setTasks(Object.values(taskData));
+      } else {
+        setTasks([]);
+      }
+    });
   }, [user]);
 
   const handleLogout = () => {
-    signOut(auth);
-    Navigate('/SignIn')
-
+    signOut(auth).then(() => {
+      navigate("/SignIn");
+    });
   };
 
   return (
     <Dropdown className="user-dropdown">
-      <p><strong>{user.displayName}</strong></p>
-      <p>{user.email}</p>
+      <p><strong>{user?.displayName || "Unnamed User"}</strong></p>
+      <p>{user?.email}</p>
       <hr />
-      <p><strong>Feedback:</strong> {feedback}</p>
+
+      <p><strong>Your Feedbacks:</strong></p>
+      <ul>
+        {feedbackList.length > 0 ? (
+          feedbackList.map((msg, i) => <li key={i}>{msg}</li>)
+        ) : (
+          <li>No feedback submitted yet.</li>
+        )}
+      </ul>
+
       <hr />
       <p><strong>Your Tasks:</strong></p>
       <ul>
-        {tasks.map((task, i) => (
-          <li key={i}>{task.title}</li>
-        ))}
+        {tasks.length > 0 ? (
+          tasks.map((task, i) => <li key={i}>{task.title}</li>)
+        ) : (
+          <li>No tasks created yet.</li>
+        )}
       </ul>
+
       <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
     </Dropdown>
   );
@@ -59,6 +81,7 @@ const UserDropdown = ({ user }) => {
 
 export default UserDropdown;
 
+// Styling
 const Dropdown = styled.div`
   position: absolute;
   top: 60px;
@@ -66,7 +89,7 @@ const Dropdown = styled.div`
   background: white;
   color: black;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   padding: 1rem;
   z-index: 100;
   min-width: 250px;

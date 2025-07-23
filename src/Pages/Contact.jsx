@@ -10,7 +10,7 @@ function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [uid, setUid] = useState(null);
 
-  // 🔐 Set UID of the logged-in user
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
