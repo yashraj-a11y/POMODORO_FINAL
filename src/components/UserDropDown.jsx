@@ -86,21 +86,69 @@ const Dropdown = styled.div`
   position: absolute;
   top: 60px;
   right: 10px;
-  background: white;
-  color: black;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  padding: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #222;
+  border-radius: 1.2rem;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.18), 0 2px 8px rgba(245, 87, 108, 0.10);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
   z-index: 100;
-  min-width: 250px;
+  min-width: 270px;
+  backdrop-filter: blur(6px);
+  border: 1.5px solid rgba(102, 126, 234, 0.10);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: box-shadow 0.2s, background 0.2s;
+
+  p {
+    margin: 0.5rem 0 0.2rem 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  ul {
+    margin: 0.2rem 0 1rem 0;
+    padding-left: 1.2rem;
+    font-size: 1rem;
+    color: #555;
+    list-style: disc inside;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 1.2rem 0;
+  }
+
+  strong {
+    color: #764ba2;
+    font-weight: 700;
+    font-size: 1.08rem;
+  }
+
+  @media (max-width: 600px) {
+    right: 0;
+    left: 0;
+    min-width: unset;
+    width: 95vw;
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+  }
 `;
 
 const LogoutButton = styled.button`
-  margin-top: 1rem;
-  background: red;
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #f5576c 0%, #667eea 100%);
   color: white;
   border: none;
-  padding: 0.5rem;
-  border-radius: 0.4rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.7rem;
   cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(245, 87, 108, 0.12);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    background: linear-gradient(135deg, #667eea 0%, #f5576c 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.18);
+  }
 `;

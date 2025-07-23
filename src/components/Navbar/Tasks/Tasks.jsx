@@ -126,7 +126,6 @@ export default function Todolist() {
                 <TaskContentContainer>
                   <TaskText
                     onDoubleClick={() => startEditing(task.id, task.title)}
-                    $completed={task.completed}
                   >
                     {task.title}
                   </TaskText>
@@ -157,23 +156,32 @@ const Wrapper = styled.div`
   margin: 2rem auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: ${({ theme }) =>
+    theme.mode === 'light'
+      ? 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'
+      : 'linear-gradient(135deg, #667eea 0%, #4facfe 40%, #f093fb 100%)'};
   min-height: 100vh;
-  color: #333;
+  color: ${({ theme }) => (theme.mode === 'light' ? '#222' : '#333')};
+  border-radius: 32px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.10), 0 2px 8px rgba(245, 87, 108, 0.08);
 
   @media (max-width: 600px) {
     padding: 1rem 0.5rem;
     max-width: 100vw;
     min-height: 100vh;
+    border-radius: 0;
   }
 `;
 
 const Title = styled.h1`
   font-size: 3.5rem;
   text-align: center;
-  color: white;
+  color: ${({ theme }) => (theme.mode === 'light' ? '#333' : 'white')};
   margin-bottom: 2rem;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-shadow: ${({ theme }) =>
+    theme.mode === 'light'
+      ? 'none'
+      : '2px 2px 4px rgba(0,0,0,0.3)'};
   font-weight: 700;
 
   @media (max-width: 600px) {
@@ -186,10 +194,18 @@ const Form = styled.form`
   display: flex;
   margin-bottom: 3rem;
   gap: 1rem;
-  background: white;
+  background: ${({ theme }) =>
+    theme.mode === 'light'
+      ? 'rgba(255,255,255,0.98)'
+      : 'rgba(255,255,255,0.85)'};
   padding: 1.5rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px
+    ${({ theme }) =>
+      theme.mode === 'light'
+        ? 'rgba(102, 126, 234, 0.08), 0 2px 8px rgba(245, 87, 108, 0.04)'
+        : 'rgba(102, 126, 234, 0.10), 0 2px 8px rgba(245, 87, 108, 0.08)'};
+  backdrop-filter: blur(4px);
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -264,15 +280,26 @@ const TaskList = styled.ul`
 
 const TaskItem = styled.li`
   margin-bottom: 1.5rem;
-  background: ${({ $completed }) => 
-    $completed 
-      ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' 
-      : 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
-  };
-  border-radius: 15px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  background: ${({ $completed, theme }) => {
+    if (theme.mode === 'light') {
+      return $completed
+        ? 'linear-gradient(135deg, #fbeee6 0%, #ffe3e3 100%)'
+        : 'linear-gradient(135deg, #e3f6fd 0%, #f8fafc 100%)';
+    } else {
+      return $completed
+        ? 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+        : 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)';
+    }
+  }};
+  border-radius: 18px;
+  box-shadow: 0 8px 32px
+    ${({ theme }) =>
+      theme.mode === 'light'
+        ? 'rgba(102, 126, 234, 0.08), 0 2px 8px rgba(245, 87, 108, 0.04)'
+        : 'rgba(102, 126, 234, 0.10), 0 2px 8px rgba(245, 87, 108, 0.08)'};
   transition: all 0.3s ease;
-  opacity: ${({ $completed }) => $completed ? 0.8 : 1};
+  opacity: ${({ $completed }) => $completed ? 0.85 : 1};
+  backdrop-filter: blur(2px);
 
   &:hover {
     transform: translateY(-3px);
@@ -324,14 +351,20 @@ const TaskText = styled.span`
   font-size: 1.8rem;
   font-weight: 700;
   cursor: pointer;
-  color: white;
+  color: ${({ theme }) => (theme.mode === 'light' ? '#333' : 'white')};
   text-decoration: ${({ $completed }) => ($completed ? 'line-through' : 'none')};
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-shadow: ${({ theme }) =>
+    theme.mode === 'light'
+      ? '1px 1px 2px rgba(0,0,0,0.3)'
+      : '1px 1px 2px rgba(0,0,0,0.3)'};
   padding: 0.5rem 0;
   transition: all 0.3s ease;
 
   &:hover {
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    text-shadow: ${({ theme }) =>
+      theme.mode === 'light'
+        ? '2px 2px 4px rgba(0,0,0,0.4)'
+        : '2px 2px 4px rgba(0,0,0,0.4)'};
   }
 
   @media (max-width: 600px) {

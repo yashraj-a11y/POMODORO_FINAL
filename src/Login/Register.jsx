@@ -113,23 +113,25 @@ const Register = () => {
 
 export default Register;
 
-// Styled Components
+
 const Container = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #667eea 0%, #f093fb 50%, #f5576c 100%);
   padding: 2rem;
 `;
 
 const RegisterCard = styled.div`
-  background: white;
-  padding: 3rem;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85); 
+  padding: 3rem 2.5rem;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px 0 rgba(102, 126, 234, 0.18), 0 2px 8px 0 rgba(245, 87, 108, 0.10);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  backdrop-filter: blur(4px);
+  border: 1.5px solid rgba(255,255,255,0.25);
 `;
 
 const Title = styled.h1`
