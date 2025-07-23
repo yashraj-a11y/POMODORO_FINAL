@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navigation from '../components/Navigation/Navigation';
 
 import Pomodoro from '../Pages/PomoDoro';
-import Pmdoro from '../Pages/pmdoro';
+import Pmdoro from '../Pages/Pmdoro';
 import ShortBreak from '../Pages/ShortBreak';
 import LongBreak from '../Pages/LongBreak';
 import Contact from '../Pages/Contact';
