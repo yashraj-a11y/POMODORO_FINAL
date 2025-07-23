@@ -53,6 +53,10 @@ const FooterWrapper = styled.footer`
   margin-top: 4rem;
   padding: 0;
   transition: background 0.3s, color 0.3s;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const FooterContent = styled.div`
@@ -63,11 +67,21 @@ const FooterContent = styled.div`
   padding: 5rem 8rem 3.5rem 8rem; /* Larger padding */
   flex-wrap: wrap;
 
+  @media (max-width: 1200px) {
+    padding: 3rem 2rem 2rem 2rem;
+    gap: 2rem;
+  }
+
   @media (max-width: 900px) {
     flex-direction: column;
     align-items: center;
-    padding: 3rem 1rem 2rem 1rem;
-    gap: 2.5rem;
+    padding: 2.5rem 1rem 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    padding: 1.2rem 0.2rem 0.7rem 0.2rem;
+    gap: 1rem;
   }
 `;
 
@@ -75,6 +89,12 @@ const FooterSection = styled.div`
   flex: 1 1 260px;
   min-width: 220px;
   margin-bottom: 2.5rem;
+  @media (max-width: 900px) {
+    min-width: 0;
+    width: 100%;
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
 `;
 
 const FooterHeading = styled.h4`
@@ -83,12 +103,26 @@ const FooterHeading = styled.h4`
   margin-bottom: 1.7rem;
   color: inherit;
   letter-spacing: 1.5px;
+  @media (max-width: 900px) {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1.3rem;
+    margin-bottom: 0.7rem;
+  }
 `;
 
 const FooterText = styled.p`
   font-size: 2rem; /* Larger font size */
   color: ${({ theme }) => (theme.mode === 'light' ? '#444' : '#e0e0e0')};
   margin: 0;
+  @media (max-width: 900px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1rem;
+  }
 `;
 
 const FooterLinks = styled.ul`
@@ -102,6 +136,12 @@ const FooterLink = styled.a`
   text-decoration: none;
   font-size: 1.8rem; /* Larger font size */
   transition: color 0.2s;
+  @media (max-width: 900px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 1rem;
+  }
   &:hover {
     color: #00f2fe;
     text-decoration: underline;
@@ -112,6 +152,15 @@ const SocialLinks = styled.div`
   display: flex;
   gap: 2.2rem;
   margin-top: 1.5rem;
+  justify-content: center;
+  @media (max-width: 900px) {
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 600px) {
+    gap: 0.7rem;
+    margin-top: 0.5rem;
+  }
 `;
 
 const SocialIcon = styled.a`
@@ -128,6 +177,16 @@ const SocialIcon = styled.a`
   font-size: 2.7rem; /* Larger icon size */
   color: ${({ theme }) => (theme.mode === 'light' ? '#222' : '#fff')};
   transition: background 0.2s, color 0.2s;
+  @media (max-width: 900px) {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+  @media (max-width: 600px) {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+  }
   &:hover {
     background: #00f2fe;
     color: #764ba2;
@@ -144,10 +203,16 @@ const FooterBottom = styled.div`
   font-size: 1.7rem; /* Larger font size */
   color: ${({ theme }) => (theme.mode === 'light' ? '#444' : '#e0e0e0')};
   letter-spacing: 0.7px;
-  @media (max-width: 600px) {
+  @media (max-width: 900px) {
+    font-size: 1.1rem;
+    padding: 1.2rem 0.2rem 1rem 0.2rem;
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
-    font-size: 1.2rem;
-    padding: 1.7rem 0.2rem 1.2rem 0.2rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 0.95rem;
+    padding: 0.7rem 0.1rem 0.5rem 0.1rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 `;
