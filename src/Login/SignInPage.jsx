@@ -4,8 +4,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider
 } from 'firebase/auth';
-import { auth, db } from '../firebase'; // ✅ also import db
-import { ref, set } from 'firebase/database'; // ✅ import Realtime DB functions
+import { auth, db } from '../firebase'; 
+import { ref, set } from 'firebase/database'; 
 import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -27,10 +27,10 @@ const SignInPage = () => {
       const uid = userCredential.user.uid;
       const timestamp = Date.now();
 
-      // ✅ Save login timestamp in Realtime DB
+     
       await set(ref(db, `users/${uid}/logins/${timestamp}`), true);
 
-      navigate('/'); // Redirect to home
+      navigate('/'); 
     } catch (err) {
       setError('Invalid email or password. Please try again.',err);
     } finally {
@@ -47,10 +47,10 @@ const SignInPage = () => {
       const uid = userCredential.user.uid;
       const timestamp = Date.now();
 
-      // ✅ Save login timestamp in Realtime DB
+      
       await set(ref(db, `users/${uid}/logins/${timestamp}`), true);
 
-      navigate('/'); // Redirect to home
+      navigate('/'); 
     } catch (err) {
       setError('Google sign-in failed. Please try again.',err);
     } finally {

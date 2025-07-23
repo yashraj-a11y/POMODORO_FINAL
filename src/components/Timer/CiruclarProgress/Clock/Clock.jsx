@@ -49,6 +49,14 @@ const ClockContainer = styled.div`
 
 const TimerText = styled.h3`
   font-size: 8rem;
+
+  @media (max-width: 768px) {
+    font-size: 5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 3.5rem;
+  }
 `;
 
 const StartPauseButton = styled.button`
