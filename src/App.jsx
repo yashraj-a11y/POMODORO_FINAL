@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
-import RouteApp from './Route/Route';
+import RouteApp from './Route/route';
 import GlobalStyle from './globalStyles';
 import { theme as lightTheme, darkTheme } from './theme';
 import UserDropdown from './components/UserDropDown';
