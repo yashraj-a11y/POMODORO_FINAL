@@ -160,6 +160,12 @@ const Wrapper = styled.div`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   color: #333;
+
+  @media (max-width: 600px) {
+    padding: 1rem 0.5rem;
+    max-width: 100vw;
+    min-height: 100vh;
+  }
 `;
 
 const Title = styled.h1`
@@ -169,6 +175,11 @@ const Title = styled.h1`
   margin-bottom: 2rem;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
   font-weight: 700;
+
+  @media (max-width: 600px) {
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
+  }
 `;
 
 const Form = styled.form`
@@ -179,6 +190,13 @@ const Form = styled.form`
   padding: 1.5rem;
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 1rem 0.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const Input = styled.input`
@@ -203,6 +221,11 @@ const Input = styled.input`
     color: #a0aec0;
     font-weight: 400;
   }
+
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+    padding: 0.7rem 1rem;
+  }
 `;
 
 const AddButton = styled.button`
@@ -224,6 +247,12 @@ const AddButton = styled.button`
 
   &:active {
     transform: translateY(0);
+  }
+
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+    padding: 0.7rem 1rem;
+    width: 100%;
   }
 `;
 
@@ -249,10 +278,18 @@ const TaskItem = styled.li`
     transform: translateY(-3px);
     box-shadow: 0 12px 40px rgba(0,0,0,0.2);
   }
+
+  @media (max-width: 600px) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const TaskContent = styled.div`
   padding: 2rem;
+
+  @media (max-width: 600px) {
+    padding: 1rem 0.5rem;
+  }
 `;
 
 const Checkbox = styled.input`
@@ -261,6 +298,12 @@ const Checkbox = styled.input`
   cursor: pointer;
   accent-color: #fff;
   margin-right: 1.5rem;
+
+  @media (max-width: 600px) {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.7rem;
+  }
 `;
 
 const TaskContentContainer = styled.div`
@@ -268,6 +311,12 @@ const TaskContentContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
 `;
 
 const TaskText = styled.span`
@@ -284,6 +333,11 @@ const TaskText = styled.span`
   &:hover {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
   }
+
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+    padding: 0.3rem 0;
+  }
 `;
 
 const EditingContainer = styled.div`
@@ -291,6 +345,10 @@ const EditingContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+
+  @media (max-width: 600px) {
+    gap: 0.5rem;
+  }
 `;
 
 const EditInput = styled.input`
@@ -307,12 +365,23 @@ const EditInput = styled.input`
     outline: none;
     box-shadow: 0 0 0 3px rgba(255,255,255,0.5);
   }
+
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+    padding: 0.7rem 1rem;
+  }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   gap: 0.8rem;
   align-items: center;
+
+  @media (max-width: 600px) {
+    gap: 0.4rem;
+    width: 100%;
+    justify-content: flex-end;
+  }
 `;
 
 const BaseButton = styled.button`
@@ -331,6 +400,11 @@ const BaseButton = styled.button`
 
   &:active {
     transform: translateY(0);
+  }
+
+  @media (max-width: 600px) {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
   }
 `;
 
@@ -377,15 +451,27 @@ const EmptyState = styled.div`
   background: white;
   border-radius: 15px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+
+  @media (max-width: 600px) {
+    padding: 2rem 0.5rem;
+  }
 `;
 
 const EmptyIcon = styled.div`
   font-size: 4rem;
   margin-bottom: 1rem;
+
+  @media (max-width: 600px) {
+    font-size: 2.5rem;
+  }
 `;
 
 const EmptyText = styled.p`
   font-size: 1.6rem;
   color: #718096;
   font-weight: 500;
+
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+  }
 `;
